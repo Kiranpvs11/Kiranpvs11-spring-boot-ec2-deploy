@@ -22,14 +22,18 @@ jobs:
     - name: Build with Maven
       run: ./mvnw clean package -DskipTests
 
-    - name: Copy JAR to EC2
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        source: "target/*.jar"
-        target: "/home/${{ secrets.EC2_USER }}/app.jar"
+    - name: Rename built JAR to app.jar
+  run: mv target/*.jar target/app.jar
+
+- name: Copy JAR to EC2
+  uses: appleboy/scp-action@master
+  with:
+    host: ${{ secrets.EC2_HOST }}
+    username: ${{ secrets.EC2_USER }}
+    key: ${{ secrets.EC2_SSH_KEY }}
+    source: "target/app.jar"
+    target: "/home/${{ secrets.EC2_USER }}/app.jar"
+
 
     - name: Run Spring Boot on EC2
   uses: appleboy/ssh-action@master
