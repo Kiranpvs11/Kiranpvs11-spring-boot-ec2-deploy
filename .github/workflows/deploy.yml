@@ -22,7 +22,7 @@ jobs:
     - name: Build with Maven
       run: ./mvnw clean package -DskipTests
 
-    - name: Rename built JAR to app.jar
+   - name: Rename built JAR to app.jar
   run: mv target/*.jar target/app.jar
 
 - name: Copy JAR to EC2
